@@ -1,27 +1,19 @@
-import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './App.scss';
+import React from 'react';
+import { Users } from './components/Users';
+import { User } from './components/User';
+import { EditUser } from './components/EditUser';
 
-interface Props {
-  onClick: () => void;
-}
-
-export const Provider: React.FC<Props> = React.memo(
-  ({ onClick, children }) => (
-    <button
-      type="button"
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  ),
-);
-
-export const App: React.FC = () => {
+export function App() {
   return (
-    <div className="starter">
-      <Provider onClick={() => ({})}>
-        <TodoList />
-      </Provider>
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Users />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/user" element={<User />} />
+        <Route path="/addedituser" element={<EditUser />} />
+      </Routes>
     </div>
   );
-};
+}

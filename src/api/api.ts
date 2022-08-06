@@ -22,10 +22,13 @@ export async function delUser(id : number) {
 }
 
 export async function createUser(
-  name : string,
-  email : string,
-  body : string,
-  postId: number | undefined,
+  first_name: string,
+  last_name: string,
+  birth_date: string,
+  gender: string,
+  job: string,
+  biography: string,
+  is_active: boolean,
 ) {
   await fetch(`${BASE_URL}`, {
     method: 'POST',
@@ -33,11 +36,25 @@ export async function createUser(
       'Content-type': 'application/json; charset=UTF-8',
     },
     body: JSON.stringify({
-      postId,
-      name,
-      email,
-      body,
+      first_name,
+      last_name,
+      birth_date,
+      gender,
+      job,
+      biography,
+      is_active,
     }),
+  });
+
+  // eslint-disable-next-line no-console
+  console.log({
+    first_name,
+    last_name,
+    birth_date,
+    gender,
+    job,
+    biography,
+    is_active,
   });
 }
 

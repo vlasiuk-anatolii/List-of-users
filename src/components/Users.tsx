@@ -10,6 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import FaceIcon from '@mui/icons-material/Face';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import { delUser } from '../api/api';
@@ -75,7 +76,9 @@ export function Users() {
                   <Button
                     variant="outlined"
                     onClick={() => {
-                      deleteUser(item.id);
+                      if (item.id) {
+                        deleteUser(item.id);
+                      }
                     }}
                   >
                     <DeleteRoundedIcon />
@@ -85,7 +88,18 @@ export function Users() {
             ))}
           </TableBody>
         </Table>
+        <Button
+          sx={{ m: '10px 20px' }}
+          variant="outlined"
+          onClick={() => {
+            navigate('/addedituser');
+          }}
+        >
+          Add User
+          <AddCircleOutlineOutlinedIcon sx={{ ml: '10px' }} />
+        </Button>
       </TableContainer>
+
     </>
   );
 }

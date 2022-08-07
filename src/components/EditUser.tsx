@@ -1,5 +1,5 @@
 import './EditUser.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -12,9 +12,11 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
+import { useSelector } from 'react-redux';
 import { Alert, FormControlLabel } from '@mui/material';
 // eslint-disable-next-line import/extensions, import/no-unresolved
-import { createUser } from '../api/api';
+import { createUser, updateUser } from '../api/api';
+import { getCurrentUserSelector } from '../store/selectors';
 
 const label = {
   inputProps: { 'aria-label': 'Checkbox demo' },
@@ -36,8 +38,9 @@ export function EditUser() {
   const [isActive, setIsActive] = useState(false);
   const [isErrorForm, setIsErrorForm] = useState(false);
   const [isCreatedUser, setIsCreatedUser] = useState(false);
+  const [isEditUser, setIsEditUser] = useState(false);
 
-  const date = `${value?.getFullYear()}-${value?.getMonth()}-${value?.getDay()}`;
+  // const date = `${value?.getFullYear()}-${value?.getMonth()}-${value?.getDay()}`;
 
   const handleChangeFirstName = (name: string) => {
     if ((/^[a-zA-z\s]*$/g).test(name)) {
@@ -84,12 +87,16 @@ export function EditUser() {
     }
   };
 
+  const userForEdit = useSelector(getCurrentUserSelector);
+
+  // eslint-disable-next-line no-console
+  console.log(userForEdit);
+
   const handlerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // eslint-disable-next-line no-console
-    console.log(sex);
+
     if (firstName && lastName && sex && value && job && biography) {
-      createUser(firstName, lastName, date, sex, job, biography, isActive);
+      createUser(firstName, lastName, value, sex, job, biography, isActive);
       setIsErrorForm(false);
       setIsCreatedUser(true);
       setSex('');
@@ -104,6 +111,19 @@ export function EditUser() {
     }
   };
 
+  useEffect(() => {
+    if (userForEdit) {
+      setFirstName(userForEdit.first_name);
+      setLastName(userForEdit.last_name);
+      setValue(userForEdit.birth_date);
+      setSex(userForEdit.gender);
+      setJob(userForEdit.job);
+      setBiography(userForEdit.biography);
+      setIsActive(userForEdit.is_active);
+      setIsEditUser(true);
+    }
+  }, []);
+
   return (
     <>
       <Box
@@ -115,7 +135,10 @@ export function EditUser() {
         autoComplete="off"
         onSubmit={handlerForm}
       >
-        <h1 className="title">Add User</h1>
+        <h1 className="title">
+          {isEditUser ? 'Edit User' : 'Add User'}
+          {' '}
+        </h1>
         <div className="wrapper">
           <TextField
             error={isErrorFirstName}
@@ -233,8 +256,32 @@ export function EditUser() {
             <Button
               variant="outlined"
               type="submit"
+              disabled={isEditUser}
             >
-              Submit
+              Add New User
+            </Button>
+          </Stack>
+          <Stack spacing={2} direction="row" sx={{ m: 1 }}>
+            <Button
+              variant="outlined"
+              type="button"
+              disabled={!isEditUser}
+              onClick={() => {
+                if (userForEdit) {
+                  updateUser(
+                    userForEdit.id,
+                    firstName,
+                    lastName,
+                    value,
+                    sex,
+                    job,
+                    biography,
+                    isActive,
+                  );
+                }
+              }}
+            >
+              Edit User
             </Button>
           </Stack>
           {isErrorForm && (

@@ -18,7 +18,7 @@ export enum ActionType {
 // Initial state
 const initialState: RootState = {
   users: [],
-  currentId: 2566,
+  currentId: 0,
   currentUser: undefined,
 };
 

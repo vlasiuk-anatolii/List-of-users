@@ -91,7 +91,13 @@ export function User() {
                   <TableCell align="center">
                     <Button
                       variant="outlined"
-                      onClick={() => {}}
+                      onClick={() => {
+                        if (currentId) {
+                          navigate('/addedituser');
+                        } else {
+                          setIsId(true);
+                        }
+                      }}
                     >
                       <ModeEditIcon />
                     </Button>

@@ -3,7 +3,7 @@ export interface User {
   id?: number,
   first_name: string,
   last_name: string,
-  birth_date: string,
+  birth_date: Date | null,
   gender: string,
   job: string,
   biography: string,

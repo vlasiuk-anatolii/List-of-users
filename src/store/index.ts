@@ -2,6 +2,7 @@ import {
   configureStore,
   createReducer,
   createAsyncThunk,
+  createAction,
 } from '@reduxjs/toolkit';
 
 import { getAllUsers, getUser } from '../api/api';
@@ -13,14 +14,18 @@ export enum ActionType {
   SET_ALL_USERS = 'SET_ALL_USERS',
   SET_CURRENT_ID = 'SET_CURRENT_ID',
   SET_CURRENT_USER = 'SET_CURRENT_USER',
+  SET_MODE = 'SET_MODE',
 }
 
 // Initial state
 const initialState: RootState = {
   users: [],
-  currentId: 2566,
+  currentId: 0,
   currentUser: undefined,
+  mode: true,
 };
+
+export const setMode = createAction<boolean>(ActionType.SET_MODE);
 
 export const setCurrentId = createAsyncThunk(ActionType.SET_CURRENT_ID,
   async (currentId: number | undefined) => {
@@ -57,6 +62,11 @@ const reducer = createReducer(initialState, (builder) => {
   builder.addCase(setCurrentId.fulfilled, (state, action) => {
     // eslint-disable-next-line no-param-reassign
     state.currentId = action.payload;
+  });
+
+  builder.addCase(setMode, (state, action) => {
+    // eslint-disable-next-line no-param-reassign
+    state.mode = action.payload;
   });
 });
 

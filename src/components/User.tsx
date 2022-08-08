@@ -1,5 +1,6 @@
 import './User.scss';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,6 +13,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import { delUser, getUser } from '../api/api';
@@ -21,33 +23,43 @@ import {
   loadUser,
   loadUsers,
   setCurrentId,
+  setMode,
 } from '../store';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 export function User() {
+  const navigate = useNavigate();
   const [isId, setIsId] = useState(false);
   const dispatch: AppDispatch = useDispatch();
   const currentId = useSelector(getCurrentIdSelector);
-  const getCurrentUser = async () => {
-    if (currentId) {
-      await getUser(currentId);
-      dispatch(loadUser(currentId));
+  const getCurrentUser = async (id: number | undefined) => {
+    if (id) {
+      await getUser(id);
+
+      dispatch(loadUser(id));
+      setIsId(false);
     }
+
+    setIsId(true);
   };
 
   const deleteUser = async (id: number) => {
     if (id) {
       await delUser(id);
+
       dispatch(loadUsers());
+      setIsId(false);
     }
+
+    setIsId(true);
   };
 
   const currentUser = useSelector(getCurrentUserSelector);
 
   useEffect(() => {
     dispatch(loadUser());
-    getCurrentUser();
+    getCurrentUser(currentId);
   }, [currentId]);
 
   return (
@@ -70,8 +82,8 @@ export function User() {
               <TableCell align="center">delete</TableCell>
             </TableRow>
           </TableHead>
-          {currentUser
-            ? (
+          { currentUser?.id
+            && (
               <TableBody>
                 <TableRow
                   sx={{ 'td, th': { border: 1 } }}
@@ -88,7 +100,15 @@ export function User() {
                   <TableCell align="center">
                     <Button
                       variant="outlined"
-                      onClick={() => {}}
+                      onClick={() => {
+                        if (currentId) {
+                          dispatch(setMode(false));
+                          setIsId(false);
+                          navigate('/addedituser');
+                        } else {
+                          setIsId(true);
+                        }
+                      }}
                     >
                       <ModeEditIcon />
                     </Button>
@@ -99,8 +119,8 @@ export function User() {
                       onClick={() => {
                         if (currentId) {
                           deleteUser(currentId);
-
                           dispatch(setCurrentId(undefined));
+                          setIsId(false);
                         } else {
                           setIsId(true);
                         }
@@ -111,23 +131,27 @@ export function User() {
                   </TableCell>
                 </TableRow>
               </TableBody>
-            )
-            : (
-              <Stack sx={{ width: '100%' }} spacing={2}>
-                <Alert variant="filled" severity="error">
-                  User is not exist!
-                </Alert>
-              </Stack>
             )}
         </Table>
+        <Button
+          sx={{ m: '10px 20px' }}
+          variant="outlined"
+          onClick={() => {
+            dispatch(setMode(true));
+            navigate('/addedituser');
+          }}
+        >
+          Add User
+          <AddCircleOutlineOutlinedIcon sx={{ ml: '10px' }} />
+        </Button>
       </TableContainer>
       {isId && (
-        <Stack sx={{ width: '100%' }} spacing={2}>
+        <Stack className="message" sx={{ width: '100%' }} spacing={2}>
           <Alert variant="filled" severity="error">
             User is not exist!
           </Alert>
         </Stack>
-      ) }
+      )}
     </>
   );
 }

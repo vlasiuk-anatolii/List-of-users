@@ -42,8 +42,10 @@ Also, the button "Delete"(iconbasket) to remove the user from the list. When you
 - react-router-dom
 - typescript
 - react-dom
+- fetch-request
 - date-io
 - JS
+- API
 - HTML
 - SASS
 - AsyncThunk

@@ -1,0 +1,52 @@
+[
+    {
+        "id": 2558,
+        "first_name": "David",
+        "last_name": "Lynch",
+        "birth_date": "1946-01-20",
+        "gender": "male",
+        "job": "Director",
+        "biography": "David Keith Lynch is an American filmmaker, painter, visual artist, actor, musician, and writer. A recipient of an Academy Honorary Award in 2019, Lynch has received three Academy Award nominations for Best Director, and the César Award for Best Foreign Film twice, as well as the Palme d'Or at the Cannes Film Festival and a Golden Lion award for lifetime achievement at the Venice Film Festival. In 2007, a panel of critics convened by The Guardian announced that \"after all the discussion, no one could fault the conclusion that David Lynch is the most important film-maker of the current era\", while AllMovie called him \"the Renaissance man of modern American filmmaking\". His work led to him being labeled \"the first populist surrealist\" by film critic Pauline Kael.",
+        "is_active": true
+    },
+    {
+        "id": 2556,
+        "first_name": "Julia",
+        "last_name": "Ducournau",
+        "birth_date": "1983-11-18",
+        "gender": "female",
+        "job": "Director",
+        "biography": "Julia Ducournau is a French film director and screenwriter. She made her feature film debut in 2016 with Raw. At the 2021 Cannes Film Festival, she won the Palme d'Or for her film Titane, which made her the second female director to win the award as well as the first to win the award solo. Additionally, Ducournau also received a nomination for Best Director at the 75th British Academy Film Awards. Her films typically fall under the body horror genre.",
+        "is_active": true
+    },
+    {
+        "id": 2561,
+        "first_name": "asdasdasd2",
+        "last_name": "asd",
+        "birth_date": "2022-08-27",
+        "gender": "female",
+        "job": "asd",
+        "biography": "asdsad",
+        "is_active": true
+    },
+    {
+        "id": 2559,
+        "first_name": "asdasd",
+        "last_name": "asdasd",
+        "birth_date": "2022-08-18",
+        "gender": "female",
+        "job": "asd",
+        "biography": "asd",
+        "is_active": true
+    },
+    {
+        "id": 2563,
+        "first_name": "asd",
+        "last_name": "asd",
+        "birth_date": "2022-08-04",
+        "gender": "male",
+        "job": "asd",
+        "biography": "asd",
+        "is_active": false
+    }
+]

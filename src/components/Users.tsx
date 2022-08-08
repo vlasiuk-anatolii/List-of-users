@@ -52,9 +52,6 @@ export function Users() {
     dispatch(loadUsers());
   }, []);
 
-  // eslint-disable-next-line no-console
-  console.log(currentUsers);
-
   return (
     <>
       <h1 className="Title">Users</h1>

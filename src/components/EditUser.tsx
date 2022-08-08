@@ -43,9 +43,6 @@ export function EditUser() {
   // const [isEditUser, setIsEditUser] = useState(false);
   const currentMode = useSelector(getModeSelector);
 
-  // eslint-disable-next-line no-console
-  console.log(value);
-
   const transformDate = (stateDate: Date | null): string => {
     const date = `${stateDate?.getFullYear()}-${stateDate?.getMonth()}-${stateDate?.getDay()}`;
 
@@ -99,9 +96,6 @@ export function EditUser() {
 
   const userForEdit = useSelector(getCurrentUserSelector);
 
-  // eslint-disable-next-line no-console
-  console.log(userForEdit?.birth_date);
-
   const handlerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -127,8 +121,6 @@ export function EditUser() {
       setLastName(userForEdit.last_name);
       setSex(userForEdit.gender);
       setValue(new Date(userForEdit.birth_date));
-      // eslint-disable-next-line no-console
-      console.log(value);
       setJob(userForEdit.job);
       setBiography(userForEdit.biography);
       setIsActive(userForEdit.is_active);

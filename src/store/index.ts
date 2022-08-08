@@ -12,7 +12,6 @@ import { RootState } from '../react-app-env';
 // eslint-disable-next-line no-shadow
 export enum ActionType {
   SET_ALL_USERS = 'SET_ALL_USERS',
-  SET_CURRENT_ID = 'SET_CURRENT_ID',
   SET_CURRENT_USER = 'SET_CURRENT_USER',
   SET_MODE = 'SET_MODE',
 }
@@ -20,19 +19,11 @@ export enum ActionType {
 // Initial state
 const initialState: RootState = {
   users: [],
-  currentId: 0,
   currentUser: undefined,
   mode: true,
 };
 
 export const setMode = createAction<boolean>(ActionType.SET_MODE);
-
-export const setCurrentId = createAsyncThunk(ActionType.SET_CURRENT_ID,
-  async (currentId: number | undefined) => {
-    const userFromServer = await getUser(currentId);
-
-    return userFromServer.id;
-  });
 
 export const loadUsers = createAsyncThunk(ActionType.SET_ALL_USERS, async () => {
   const usersFromServer = await getAllUsers();
@@ -57,11 +48,6 @@ const reducer = createReducer(initialState, (builder) => {
   builder.addCase(loadUser.fulfilled, (state, action) => {
     // eslint-disable-next-line no-param-reassign
     state.currentUser = action.payload;
-  });
-
-  builder.addCase(setCurrentId.fulfilled, (state, action) => {
-    // eslint-disable-next-line no-param-reassign
-    state.currentId = action.payload;
   });
 
   builder.addCase(setMode, (state, action) => {

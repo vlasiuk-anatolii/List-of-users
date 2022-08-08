@@ -1,5 +1,5 @@
 import './User.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Table from '@mui/material/Table';
@@ -16,13 +16,11 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
-import { delUser, getUser } from '../api/api';
-import { getCurrentIdSelector, getCurrentUserSelector } from '../store/selectors';
+import { delUser } from '../api/api';
+import { getCurrentUserSelector } from '../store/selectors';
 import {
   AppDispatch,
-  loadUser,
   loadUsers,
-  setCurrentId,
   setMode,
 } from '../store';
 
@@ -32,35 +30,24 @@ export function User() {
   const navigate = useNavigate();
   const [isId, setIsId] = useState(false);
   const dispatch: AppDispatch = useDispatch();
-  const currentId = useSelector(getCurrentIdSelector);
-  const getCurrentUser = async (id: number | undefined) => {
-    if (id) {
-      await getUser(id);
-
-      dispatch(loadUser(id));
-      setIsId(false);
-    }
-
-    setIsId(true);
-  };
 
   const deleteUser = async (id: number) => {
-    if (id) {
-      await delUser(id);
+    try {
+      if (id) {
+        await delUser(id);
 
-      dispatch(loadUsers());
-      setIsId(false);
+        dispatch(loadUsers());
+        setIsId(false);
+      }
+
+      setIsId(true);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
     }
-
-    setIsId(true);
   };
 
   const currentUser = useSelector(getCurrentUserSelector);
-
-  useEffect(() => {
-    dispatch(loadUser());
-    getCurrentUser(currentId);
-  }, [currentId]);
 
   return (
     <>
@@ -100,14 +87,10 @@ export function User() {
                   <TableCell align="center">
                     <Button
                       variant="outlined"
+                      disabled={isId}
                       onClick={() => {
-                        if (currentId) {
-                          dispatch(setMode(false));
-                          setIsId(false);
-                          navigate('/addedituser');
-                        } else {
-                          setIsId(true);
-                        }
+                        dispatch(setMode(false));
+                        navigate('/addedituser');
                       }}
                     >
                       <ModeEditIcon />
@@ -116,10 +99,10 @@ export function User() {
                   <TableCell align="center">
                     <Button
                       variant="outlined"
+                      disabled={isId}
                       onClick={() => {
-                        if (currentId) {
-                          deleteUser(currentId);
-                          dispatch(setCurrentId(undefined));
+                        if (currentUser.id) {
+                          deleteUser(currentUser.id);
                           setIsId(false);
                         } else {
                           setIsId(true);
@@ -148,7 +131,7 @@ export function User() {
       {isId && (
         <Stack className="message" sx={{ width: '100%' }} spacing={2}>
           <Alert variant="filled" severity="error">
-            User is not exist!
+            User was deleted successfully!
           </Alert>
         </Stack>
       )}

@@ -19,7 +19,7 @@ import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import { delUser } from '../api/api';
 import { getUsersSelector } from '../store/selectors';
-import { loadUsers, AppDispatch, setCurrentId } from '../store';
+import { loadUsers, AppDispatch, loadUser } from '../store';
 
 const Transition = React.forwardRef((
   props: TransitionProps & {
@@ -81,8 +81,10 @@ export function Users() {
                     sx={{ mr: '20px' }}
                     variant="outlined"
                     onClick={() => {
-                      dispatch(setCurrentId(item.id));
-                      navigate('/user');
+                      if (item.id) {
+                        dispatch(loadUser(item.id));
+                        navigate('/user');
+                      }
                     }}
                   >
                     <FaceIcon />

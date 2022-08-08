@@ -3,7 +3,7 @@ export interface User {
   id?: number,
   first_name: string,
   last_name: string,
-  birth_date: Date | null,
+  birth_date: string,
   gender: string,
   job: string,
   biography: string,
@@ -18,4 +18,5 @@ export interface RootState {
   users: User[];
   currentId: number | undefined;
   currentUser: User | undefined;
+  mode: boolean;
 }

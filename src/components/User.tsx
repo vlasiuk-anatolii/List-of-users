@@ -23,6 +23,7 @@ import {
   loadUser,
   loadUsers,
   setCurrentId,
+  setMode,
 } from '../store';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -32,25 +33,33 @@ export function User() {
   const [isId, setIsId] = useState(false);
   const dispatch: AppDispatch = useDispatch();
   const currentId = useSelector(getCurrentIdSelector);
-  const getCurrentUser = async () => {
-    if (currentId) {
-      await getUser(currentId);
-      dispatch(loadUser(currentId));
+  const getCurrentUser = async (id: number | undefined) => {
+    if (id) {
+      await getUser(id);
+
+      dispatch(loadUser(id));
+      setIsId(false);
     }
+
+    setIsId(true);
   };
 
   const deleteUser = async (id: number) => {
     if (id) {
       await delUser(id);
+
       dispatch(loadUsers());
+      setIsId(false);
     }
+
+    setIsId(true);
   };
 
   const currentUser = useSelector(getCurrentUserSelector);
 
   useEffect(() => {
     dispatch(loadUser());
-    getCurrentUser();
+    getCurrentUser(currentId);
   }, [currentId]);
 
   return (
@@ -73,8 +82,8 @@ export function User() {
               <TableCell align="center">delete</TableCell>
             </TableRow>
           </TableHead>
-          {currentUser
-            ? (
+          { currentUser?.id
+            && (
               <TableBody>
                 <TableRow
                   sx={{ 'td, th': { border: 1 } }}
@@ -93,6 +102,8 @@ export function User() {
                       variant="outlined"
                       onClick={() => {
                         if (currentId) {
+                          dispatch(setMode(false));
+                          setIsId(false);
                           navigate('/addedituser');
                         } else {
                           setIsId(true);
@@ -108,8 +119,8 @@ export function User() {
                       onClick={() => {
                         if (currentId) {
                           deleteUser(currentId);
-
                           dispatch(setCurrentId(undefined));
+                          setIsId(false);
                         } else {
                           setIsId(true);
                         }
@@ -120,19 +131,13 @@ export function User() {
                   </TableCell>
                 </TableRow>
               </TableBody>
-            )
-            : (
-              <Stack sx={{ width: '100%' }} spacing={2}>
-                <Alert variant="filled" severity="error">
-                  User is not exist!
-                </Alert>
-              </Stack>
             )}
         </Table>
         <Button
           sx={{ m: '10px 20px' }}
           variant="outlined"
           onClick={() => {
+            dispatch(setMode(true));
             navigate('/addedituser');
           }}
         >
@@ -141,12 +146,12 @@ export function User() {
         </Button>
       </TableContainer>
       {isId && (
-        <Stack sx={{ width: '100%' }} spacing={2}>
+        <Stack className="message" sx={{ width: '100%' }} spacing={2}>
           <Alert variant="filled" severity="error">
             User is not exist!
           </Alert>
         </Stack>
-      ) }
+      )}
     </>
   );
 }

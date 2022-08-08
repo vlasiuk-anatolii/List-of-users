@@ -3,8 +3,9 @@ export const BASE_URL = 'https://frontend-candidate.dev.sdh.com.ua/v1/contact/';
 export async function getAllUsers() {
   const response = await fetch(`${BASE_URL}`);
 
-  // eslint-disable-next-line no-console
-  console.log(response);
+  if (!response.ok) {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
 
   return response.json();
 }
@@ -12,11 +13,19 @@ export async function getAllUsers() {
 export async function getUser(id: number | undefined) {
   const response = await fetch(`${BASE_URL}${id}`);
 
+  if (!response.ok) {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
+
   return response.json();
 }
 
 export async function delUser(id : number) {
   const response = await fetch(`${BASE_URL}${id}`, { method: 'DELETE' });
+
+  if (!response.ok) {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
 
   return response;
 }
@@ -24,13 +33,13 @@ export async function delUser(id : number) {
 export async function createUser(
   first_name: string,
   last_name: string,
-  birth_date: Date,
+  birth_date: string,
   gender: string,
   job: string,
   biography: string,
   is_active: boolean,
 ) {
-  await fetch(`${BASE_URL}`, {
+  const response = await fetch(`${BASE_URL}`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
@@ -46,29 +55,24 @@ export async function createUser(
     }),
   });
 
-  // eslint-disable-next-line no-console
-  console.log({
-    first_name,
-    last_name,
-    birth_date,
-    gender,
-    job,
-    biography,
-    is_active,
-  });
+  if (!response.ok) {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
+
+  return response;
 }
 
 export async function updateUser(
   id: number | undefined,
   first_name: string,
   last_name: string,
-  birth_date: Date | null,
+  birth_date: string,
   gender: string,
   job: string,
   biography: string,
   is_active: boolean,
 ) {
-  await fetch(`${BASE_URL}${id}`, {
+  const response = await fetch(`${BASE_URL}${id}`, {
     method: 'PUT',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
@@ -83,4 +87,10 @@ export async function updateUser(
       is_active,
     }),
   });
+
+  if (!response.ok) {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
+
+  return response;
 }

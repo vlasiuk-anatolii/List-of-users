@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { Alert, FormControlLabel } from '@mui/material';
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import { createUser, updateUser } from '../api/api';
-import { getCurrentUserSelector } from '../store/selectors';
+import { getCurrentUserSelector, getModeSelector } from '../store/selectors';
 
 const label = {
   inputProps: { 'aria-label': 'Checkbox demo' },
@@ -38,9 +38,19 @@ export function EditUser() {
   const [isActive, setIsActive] = useState(false);
   const [isErrorForm, setIsErrorForm] = useState(false);
   const [isCreatedUser, setIsCreatedUser] = useState(false);
-  const [isEditUser, setIsEditUser] = useState(false);
+  const [isEditedUser, setIsEditedUser] = useState(false);
 
-  // const date = `${value?.getFullYear()}-${value?.getMonth()}-${value?.getDay()}`;
+  // const [isEditUser, setIsEditUser] = useState(false);
+  const currentMode = useSelector(getModeSelector);
+
+  // eslint-disable-next-line no-console
+  console.log(value);
+
+  const transformDate = (stateDate: Date | null): string => {
+    const date = `${stateDate?.getFullYear()}-${stateDate?.getMonth()}-${stateDate?.getDay()}`;
+
+    return date;
+  };
 
   const handleChangeFirstName = (name: string) => {
     if ((/^[a-zA-z\s]*$/g).test(name)) {
@@ -90,13 +100,13 @@ export function EditUser() {
   const userForEdit = useSelector(getCurrentUserSelector);
 
   // eslint-disable-next-line no-console
-  console.log(userForEdit);
+  console.log(userForEdit?.birth_date);
 
   const handlerForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (firstName && lastName && sex && value && job && biography) {
-      createUser(firstName, lastName, value, sex, job, biography, isActive);
+    if (firstName && lastName && sex && transformDate(value) && job && biography) {
+      createUser(firstName, lastName, transformDate(value), sex, job, biography, isActive);
       setIsErrorForm(false);
       setIsCreatedUser(true);
       setSex('');
@@ -112,15 +122,16 @@ export function EditUser() {
   };
 
   useEffect(() => {
-    if (userForEdit) {
+    if (userForEdit && !currentMode) {
       setFirstName(userForEdit.first_name);
       setLastName(userForEdit.last_name);
-      setValue(userForEdit.birth_date);
       setSex(userForEdit.gender);
+      setValue(new Date(userForEdit.birth_date));
+      // eslint-disable-next-line no-console
+      console.log(value);
       setJob(userForEdit.job);
       setBiography(userForEdit.biography);
       setIsActive(userForEdit.is_active);
-      setIsEditUser(true);
     }
   }, []);
 
@@ -136,8 +147,7 @@ export function EditUser() {
         onSubmit={handlerForm}
       >
         <h1 className="title">
-          {isEditUser ? 'Edit User' : 'Add User'}
-          {' '}
+          {!currentMode ? 'Edit User' : 'Add User'}
         </h1>
         <div className="wrapper">
           <TextField
@@ -256,7 +266,7 @@ export function EditUser() {
             <Button
               variant="outlined"
               type="submit"
-              disabled={isEditUser}
+              disabled={!currentMode}
             >
               Add New User
             </Button>
@@ -265,19 +275,20 @@ export function EditUser() {
             <Button
               variant="outlined"
               type="button"
-              disabled={!isEditUser}
+              disabled={currentMode}
               onClick={() => {
                 if (userForEdit) {
                   updateUser(
                     userForEdit.id,
                     firstName,
                     lastName,
-                    value,
+                    transformDate(value),
                     sex,
                     job,
                     biography,
                     isActive,
                   );
+                  setIsEditedUser(true);
                 }
               }}
             >
@@ -296,6 +307,14 @@ export function EditUser() {
             <Stack sx={{ m: 1, width: 300 }} spacing={2}>
               <Alert variant="filled" severity="success">
                 User was created successfully!
+              </Alert>
+            </Stack>
+          ) }
+
+          {isEditedUser && (
+            <Stack sx={{ m: 1, width: 300 }} spacing={2}>
+              <Alert variant="filled" severity="success">
+                Updated successfully!
               </Alert>
             </Stack>
           ) }

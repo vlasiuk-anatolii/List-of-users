@@ -1,5 +1,6 @@
 import './Users.scss';
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,14 +9,16 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import FaceIcon from '@mui/icons-material/Face';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import { delUser } from '../api/api';
 import { getUsersSelector } from '../store/selectors';
-import { loadUsers, AppDispatch } from '../store';
+import { loadUsers, AppDispatch, setCurrentId } from '../store';
 
 export function Users() {
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
   const currentUsers = useSelector(getUsersSelector);
   const deleteUser = async (id: number) => {
     if (id) {
@@ -37,11 +40,12 @@ export function Users() {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow sx={{ 'td, th': { border: 1 } }}>
-              <TableCell>First Name</TableCell>
-              <TableCell align="left">Last Name</TableCell>
-              <TableCell align="left">BirthDate</TableCell>
-              <TableCell align="left">Sex</TableCell>
-              <TableCell align="left">Delete</TableCell>
+              <TableCell align="center">Full Name</TableCell>
+              <TableCell align="center">First Name</TableCell>
+              <TableCell align="center">Last Name</TableCell>
+              <TableCell align="center">BirthDate</TableCell>
+              <TableCell align="center">Gender</TableCell>
+              <TableCell align="center">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -51,12 +55,23 @@ export function Users() {
                 sx={{ 'td, th': { border: 1 } }}
               >
                 <TableCell component="th" scope="row">
-                  {item.first_name}
+                  <Button
+                    sx={{ mr: '20px' }}
+                    variant="outlined"
+                    onClick={() => {
+                      dispatch(setCurrentId(item.id));
+                      navigate('/user');
+                    }}
+                  >
+                    <FaceIcon />
+                  </Button>
+                  {`${item.first_name} ${item.last_name}`}
                 </TableCell>
-                <TableCell align="left">{item.last_name}</TableCell>
-                <TableCell align="left">{item.birth_date}</TableCell>
-                <TableCell align="left">{item.gender}</TableCell>
-                <TableCell align="left">
+                <TableCell align="center">{item.first_name}</TableCell>
+                <TableCell align="center">{item.last_name}</TableCell>
+                <TableCell align="center">{item.birth_date}</TableCell>
+                <TableCell align="center">{item.gender}</TableCell>
+                <TableCell align="center">
                   <Button
                     variant="outlined"
                     onClick={() => {

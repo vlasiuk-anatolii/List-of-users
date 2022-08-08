@@ -16,4 +16,6 @@ export interface UsersData {
 
 export interface RootState {
   users: User[];
+  currentId: number | undefined;
+  currentUser: User | undefined;
 }

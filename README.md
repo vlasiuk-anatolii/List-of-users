@@ -1,6 +1,6 @@
 # List of Users
 Was created one-page browser application, creating and editing user list when assistance provided API. 
-- [ADD DEMO LINK HERE]()
+- [DEMO LINK](https://vlasiuk-anatolii.github.io/SDHub/)
 
 ## Description
 The app has three pages:
@@ -42,8 +42,10 @@ Also, the button "Delete"(iconbasket) to remove the user from the list. When you
 - react-router-dom
 - typescript
 - react-dom
+- fetch-request
 - date-io
 - JS
+- API
 - HTML
 - SASS
 - AsyncThunk

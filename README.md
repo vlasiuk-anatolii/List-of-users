@@ -1,6 +1,6 @@
 # List of Users
 Was created one-page browser application, creating and editing user list when assistance provided API. 
-- [DEMO LINK](https://vlasiuk-anatolii.github.io/SDHub/)
+- [DEMO LINK](https://vlasiuk-anatolii.github.io/List-of-users/)
 
 ## Description
 The app has three pages:
